@@ -5,9 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Easy-Canvas</title>
+    <!-- <script type="text/javascript" src="https://unpkg.com/mathjs@6.2.5/"></script> -->
+    <!-- <script type="text/javascript" src="https://cdnjs.com/libraries/mathjs"></script> -->
 </head>
 <body>
     <script src="./src/index.js"></script>
+    <script src="./math.min.js"></script>
     <p>要使用的图像：</p>
     <img id="tulip" src="./eg_tulip.jpg" alt="The Tulip" />
     <p>画布：</p>
@@ -27,7 +30,9 @@
 
         ctx.drawImage(img, {
             x: 10,
-            y: 10,
+            y: 60,
+            // scale: 0.5,
+            rotate: 45,
         });
     </script>
 </body>
