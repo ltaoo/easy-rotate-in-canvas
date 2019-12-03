@@ -12,7 +12,6 @@ class EnhancedCtx {
         let lastY = y;
         if (typeof rotate === 'number') {
             ctx.rotate(rotate * Math.PI / 180);
-
             const hypotenuse = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
 
             const cos = x / hypotenuse;
@@ -20,29 +19,87 @@ class EnhancedCtx {
             const radina = Math.acos(cos);
             // 将弧度转换成角度
             const angle = Math.floor(180 / (Math.PI / radina));
-
             console.log('angle of image', angle, rotate);
-            if (angle === rotate) {
-                lastX = hypotenuse;
-                lastY = 0;
-            } else if (angle > rotate) {
-                const totalAngle = angle - rotate;
-                const realX = Math.cos(totalAngle * Math.PI / 180) * hypotenuse;
-                const realY = Math.sin(totalAngle * Math.PI / 180) * hypotenuse;
 
-                console.log(realX, realY);
-                lastX = realX;
-                lastY = realY;
+            if (rotate > 0 && rotate < 90) {
+                if (angle === rotate) {
+                    lastX = hypotenuse;
+                    lastY = 0;
+                } else if (angle > rotate) {
+                    const totalAngle = angle - rotate;
+                    const realX = Math.cos(totalAngle * Math.PI / 180) * hypotenuse;
+                    const realY = Math.sin(totalAngle * Math.PI / 180) * hypotenuse;
+
+                    lastX = realX;
+                    lastY = realY;
+                } else {
+                    const totalAngle = angle + rotate;
+                    const realX = Math.sin(totalAngle * Math.PI / 180) * hypotenuse;
+                    const realY = Math.cos(totalAngle * Math.PI / 180) * hypotenuse;
+
+                    lastX = realX;
+                    lastY = -realY;
+                }
+            } else if (rotate >= 90 && rotate <= 180) {
+                if (angle === rotate) {
+                    lastX = hypotenuse;
+                    lastY = 0;
+                } else if (angle > rotate) {
+                    const totalAngle = angle - rotate - 90;
+                    const realX = Math.cos(totalAngle * Math.PI / 180) * hypotenuse;
+                    const realY = Math.sin(totalAngle * Math.PI / 180) * hypotenuse;
+
+                    lastX = realX;
+                    lastY = realY;
+                } else {
+                    const totalAngle = angle - rotate - 90;
+                    const realX = Math.sin(totalAngle * Math.PI / 180) * hypotenuse;
+                    const realY = Math.cos(totalAngle * Math.PI / 180) * hypotenuse;
+
+                    lastX = -realX;
+                    lastY = realY;
+                }
+            } else if (rotate > 180 && rotate < 270) {
+                if (angle === rotate) {
+                    lastX = hypotenuse;
+                    lastY = 0;
+                } else if (angle > rotate) {
+                    const totalAngle = angle + rotate - 180;
+                    const realX = Math.cos(totalAngle * Math.PI / 180) * hypotenuse;
+                    const realY = Math.sin(totalAngle * Math.PI / 180) * hypotenuse;
+
+                    lastX = realX;
+                    lastY = realY;
+                } else {
+                    const totalAngle = angle + rotate - 180;
+                    console.log(totalAngle);
+                    const realX = Math.sin(totalAngle * Math.PI / 180) * hypotenuse;
+                    const realY = Math.cos(totalAngle * Math.PI / 180) * hypotenuse;
+
+                    lastX = -realX;
+                    lastY = realY;
+                }
             } else {
-                const totalAngle = angle + rotate;
-                const realX = Math.sin(totalAngle * Math.PI / 180) * hypotenuse;
-                const realY = Math.cos(totalAngle * Math.PI / 180) * hypotenuse;
+                if (angle === rotate) {
+                    lastX = hypotenuse;
+                    lastY = 0;
+                } else if (angle > rotate) {
+                    const totalAngle = angle - rotate - 270;
+                    const realX = Math.cos(totalAngle * Math.PI / 180) * hypotenuse;
+                    const realY = Math.sin(totalAngle * Math.PI / 180) * hypotenuse;
 
-                console.log(realX, realY);
-                lastX = realX;
-                lastY = -realY;
+                    lastX = realX;
+                    lastY = realY;
+                } else {
+                    const totalAngle = angle - rotate - 270;
+                    console.log(totalAngle);
+                    const realX = Math.sin(totalAngle * Math.PI / 180) * hypotenuse;
+                    const realY = Math.cos(totalAngle * Math.PI / 180) * hypotenuse;
+
+                    lastX = realX;
+                    lastY = -realY;
+                }
             }
-
         }
         ctx.drawImage(img, lastX, lastY);
     }

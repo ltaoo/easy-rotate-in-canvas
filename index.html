@@ -10,7 +10,6 @@
 </head>
 <body>
     <script src="./src/index.js"></script>
-    <script src="./math.min.js"></script>
     <p>要使用的图像：</p>
     <img id="tulip" src="./eg_tulip.jpg" alt="The Tulip" />
     <p>画布：</p>
@@ -29,10 +28,10 @@
         const img = document.getElementById('tulip');
 
         ctx.drawImage(img, {
-            x: 10,
-            y: 60,
+            x: 200,
+            y: 200,
             // scale: 0.5,
-            rotate: 45,
+            rotate: 270,
         });
     </script>
 </body>
