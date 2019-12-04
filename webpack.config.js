@@ -10,7 +10,7 @@ module.exports = {
     entry: resolve('./src/index.js'),
     output: {
         path: resolve('./build'),
-        filename: 'easy-rotate.js',
+        filename: `easy-rotate.${env === 'production' ? 'min.' : ''}js`,
         // 如果要打成 umd 包就把这两个注释取消
         libraryTarget: 'umd',
         umdNamedDefine: true,
