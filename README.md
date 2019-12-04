@@ -3,11 +3,11 @@
 ## Usage
 
 ```bash
-yarn add easy-rotate
+yarn add easy-rotate-in-canvas
 ```
 
 ```js
-const enhance = require('easy-rotate');
+const enhance = require('easy-rotate-in-canvas');
 
 const c = document.getElementById('myCanvas');
 // wrapper original ctx object use enhance
@@ -19,7 +19,7 @@ const img = document.getElementById('tulip');
 ctx.drawImage(img, {
     x: 100,
     y: 100,
-    rotate: 90,
+    rotate: 45,
 });
 ```
 
