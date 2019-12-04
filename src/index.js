@@ -15,10 +15,29 @@ function toFix(number) {
     return Number(number.toFixed(2));
 }
 
+function fixArr(ary) {
+    return ary.map(toFix);
+}
+
 export function computeXAndY(x, y, rotate) {
     if (x === 0 && y === 0) {
         return [x, y];
     }
+
+    if (rotate === 90) {
+        console.log('case 5');
+        // 4、旋转角度等于 90
+        return fixArr([y, -x]);
+    }
+    if (rotate === 270) {
+        console.log('case 11');
+        // 11、旋转角度等于 270
+        return fixArr([-y, x]);
+    }
+    if (rotate === 360) {
+        return [x, y];
+    }
+
     const hypotenuse = Math.sqrt(x ** 2 + y ** 2);
     const cos = x / hypotenuse;
     // 用反三角函数求弧度
@@ -29,37 +48,40 @@ export function computeXAndY(x, y, rotate) {
     console.log(angle, rotate);
     let result = [0, 0];
     if (angle === rotate) {
-        result = [hypotenuse, 0];
+        // 2、旋转角度等于图片角度
+        return fixArr([hypotenuse, 0]);
     }
 
     if (rotate > 0 && rotate < 90) {
         if (angle > rotate) {
+            console.log('case 3');
+            // 3、旋转角度小于 90 且图片角度大于旋转角度
             const totalAngle = angle - rotate;
             const realX = Math.cos(totalAngle * (Math.PI / 180)) * hypotenuse;
             const realY = Math.sin(totalAngle * (Math.PI / 180)) * hypotenuse;
-            result = [realX, realY];
-        } else {
-            const totalAngle = angle + rotate;
-            const realX = Math.sin(totalAngle * (Math.PI / 180)) * hypotenuse;
-            const realY = Math.cos(totalAngle * (Math.PI / 180)) * hypotenuse;
-            result = [realX, -realY];
+            return fixArr([realX, realY]);
         }
+        console.log('case 4');
+        // 4、旋转角度小于 90 且图片角度小于旋转角度
+        const totalAngle = rotate - angle;
+        const realX = Math.cos(totalAngle * (Math.PI / 180)) * hypotenuse;
+        const realY = Math.sin(totalAngle * (Math.PI / 180)) * hypotenuse;
+        return fixArr([realX, -realY]);
     }
-
-    if (rotate >= 90 && rotate <= 180) {
+    if (rotate > 90 && rotate <= 180) {
         if (angle > rotate) {
+            // 7、旋转角度小于 180 且图片角度大于旋转角度
             const totalAngle = angle - rotate - 90;
             const realX = Math.cos(totalAngle * (Math.PI / 180)) * hypotenuse;
             const realY = Math.sin(totalAngle * (Math.PI / 180)) * hypotenuse;
 
-            result = [realX, realY];
-        } else {
-            const totalAngle = angle - rotate - 90;
-            const realX = Math.sin(totalAngle * (Math.PI / 180)) * hypotenuse;
-            const realY = Math.cos(totalAngle * (Math.PI / 180)) * hypotenuse;
-
-            result = [-realX, realY];
+            return fixArr([realX, realY]);
         }
+        // 6、旋转角度小于 180 且图片角度小于旋转角度
+        const totalAngle = angle - rotate - 90;
+        const realX = Math.sin(totalAngle * (Math.PI / 180)) * hypotenuse;
+        const realY = Math.cos(totalAngle * (Math.PI / 180)) * hypotenuse;
+        return fixArr([-realX, realY]);
     }
 
     if (rotate > 180 && rotate < 270) {
@@ -68,28 +90,30 @@ export function computeXAndY(x, y, rotate) {
             const realX = Math.cos(totalAngle * (Math.PI / 180)) * hypotenuse;
             const realY = Math.sin(totalAngle * (Math.PI / 180)) * hypotenuse;
 
-            result = [realX, realY];
-        } else {
-            const totalAngle = angle + rotate - 180;
-            const realX = Math.sin(totalAngle * (Math.PI / 180)) * hypotenuse;
-            const realY = Math.cos(totalAngle * (Math.PI / 180)) * hypotenuse;
-
-            result = [-realX, realY];
+            return fixArr([realX, realY]);
         }
-    }
-    if (angle > rotate) {
-        const totalAngle = angle - rotate - 270;
-        const realX = Math.cos(totalAngle * (Math.PI / 180)) * hypotenuse;
-        const realY = Math.sin(totalAngle * (Math.PI / 180)) * hypotenuse;
-
-        result = [realX, realY];
-    } else {
-        const totalAngle = angle - rotate - 270;
+        const totalAngle = angle + 270 - rotate;
         const realX = Math.sin(totalAngle * (Math.PI / 180)) * hypotenuse;
         const realY = Math.cos(totalAngle * (Math.PI / 180)) * hypotenuse;
 
-        result = [realX, -realY];
+        return fixArr([-realX, realY]);
     }
+    if (rotate > 270 && rotate < 360) {
+        if (angle > rotate) {
+            const totalAngle = angle - rotate - 270;
+            const realX = Math.cos(totalAngle * (Math.PI / 180)) * hypotenuse;
+            const realY = Math.sin(totalAngle * (Math.PI / 180)) * hypotenuse;
+
+            result = [realX, realY];
+        } else {
+            const totalAngle = angle - rotate - 270;
+            const realX = Math.sin(totalAngle * (Math.PI / 180)) * hypotenuse;
+            const realY = Math.cos(totalAngle * (Math.PI / 180)) * hypotenuse;
+
+            result = [realX, -realY];
+        }
+    }
+
 
     return result.map(toFix);
 }
