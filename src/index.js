@@ -7,7 +7,15 @@ function isValidatedParam(param) {
     return typeof param === 'number';
 }
 
-function computeXAndY(x, y, rotate) {
+/**
+ * 保留两位小数
+ * @param {number} number
+ */
+function toFix(number) {
+    return Number(number.toFixed(2));
+}
+
+export function computeXAndY(x, y, rotate) {
     if (x === 0 && y === 0) {
         return [x, y];
     }
@@ -19,8 +27,9 @@ function computeXAndY(x, y, rotate) {
     const angle = Math.floor(180 / (Math.PI / radina));
 
     console.log(angle, rotate);
+    let result = [0, 0];
     if (angle === rotate) {
-        return [hypotenuse, 0];
+        result = [hypotenuse, 0];
     }
 
     if (rotate > 0 && rotate < 90) {
@@ -28,12 +37,13 @@ function computeXAndY(x, y, rotate) {
             const totalAngle = angle - rotate;
             const realX = Math.cos(totalAngle * (Math.PI / 180)) * hypotenuse;
             const realY = Math.sin(totalAngle * (Math.PI / 180)) * hypotenuse;
-            return [realX, realY];
+            result = [realX, realY];
+        } else {
+            const totalAngle = angle + rotate;
+            const realX = Math.sin(totalAngle * (Math.PI / 180)) * hypotenuse;
+            const realY = Math.cos(totalAngle * (Math.PI / 180)) * hypotenuse;
+            result = [realX, -realY];
         }
-        const totalAngle = angle + rotate;
-        const realX = Math.sin(totalAngle * (Math.PI / 180)) * hypotenuse;
-        const realY = Math.cos(totalAngle * (Math.PI / 180)) * hypotenuse;
-        return [realX, -realY];
     }
 
     if (rotate >= 90 && rotate <= 180) {
@@ -42,13 +52,14 @@ function computeXAndY(x, y, rotate) {
             const realX = Math.cos(totalAngle * (Math.PI / 180)) * hypotenuse;
             const realY = Math.sin(totalAngle * (Math.PI / 180)) * hypotenuse;
 
-            return [realX, realY];
-        }
-        const totalAngle = angle - rotate - 90;
-        const realX = Math.sin(totalAngle * (Math.PI / 180)) * hypotenuse;
-        const realY = Math.cos(totalAngle * (Math.PI / 180)) * hypotenuse;
+            result = [realX, realY];
+        } else {
+            const totalAngle = angle - rotate - 90;
+            const realX = Math.sin(totalAngle * (Math.PI / 180)) * hypotenuse;
+            const realY = Math.cos(totalAngle * (Math.PI / 180)) * hypotenuse;
 
-        return [-realX, realY];
+            result = [-realX, realY];
+        }
     }
 
     if (rotate > 180 && rotate < 270) {
@@ -57,26 +68,30 @@ function computeXAndY(x, y, rotate) {
             const realX = Math.cos(totalAngle * (Math.PI / 180)) * hypotenuse;
             const realY = Math.sin(totalAngle * (Math.PI / 180)) * hypotenuse;
 
-            return [realX, realY];
-        }
-        const totalAngle = angle + rotate - 180;
-        const realX = Math.sin(totalAngle * (Math.PI / 180)) * hypotenuse;
-        const realY = Math.cos(totalAngle * (Math.PI / 180)) * hypotenuse;
+            result = [realX, realY];
+        } else {
+            const totalAngle = angle + rotate - 180;
+            const realX = Math.sin(totalAngle * (Math.PI / 180)) * hypotenuse;
+            const realY = Math.cos(totalAngle * (Math.PI / 180)) * hypotenuse;
 
-        return [-realX, realY];
+            result = [-realX, realY];
+        }
     }
     if (angle > rotate) {
         const totalAngle = angle - rotate - 270;
         const realX = Math.cos(totalAngle * (Math.PI / 180)) * hypotenuse;
         const realY = Math.sin(totalAngle * (Math.PI / 180)) * hypotenuse;
 
-        return [realX, realY];
-    }
-    const totalAngle = angle - rotate - 270;
-    const realX = Math.sin(totalAngle * (Math.PI / 180)) * hypotenuse;
-    const realY = Math.cos(totalAngle * (Math.PI / 180)) * hypotenuse;
+        result = [realX, realY];
+    } else {
+        const totalAngle = angle - rotate - 270;
+        const realX = Math.sin(totalAngle * (Math.PI / 180)) * hypotenuse;
+        const realY = Math.cos(totalAngle * (Math.PI / 180)) * hypotenuse;
 
-    return [realX, -realY];
+        result = [realX, -realY];
+    }
+
+    return result.map(toFix);
 }
 
 class EnhancedCtx {
