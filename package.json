@@ -1,6 +1,6 @@
 {
-  "name": "easy-canvas",
-  "version": "1.0.0",
+  "name": "easy-rotate-in-canvas",
+  "version": "1.0.1",
   "description": "",
   "homepage": "https://github.com/ltaoo/easy-rotate-in-canvas",
   "bugs": "https://github.com/ltaoo/easy-rotate-in-canvas/issues",
@@ -8,7 +8,7 @@
     "type": "git",
     "url": "https://github.com/ltaoo/easy-rotate-in-canvas"
   },
-  "main": "build/easy-rotate.js",
+  "main": "build/easy-rotate.min.js",
   "scripts": {
     "start": "cross-env NODE_ENV=development webpack --watch",
     "build": "cross-env NODE_ENV=production webpack",
