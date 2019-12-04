@@ -5,32 +5,69 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Easy Rotate In Canvas</title>
+    <style>
+        .container {
+            display: flex;
+        }
+    </style>
+    <script src="https://unpkg.com/easy-rotate-in-canvas@1.0.2"></script>
 </head>
 <body>
-    <script src="https://unpkg.com/easy-rotate-in-canvas@1.0.1"></script>
-    <p>要使用的图像：</p>
-    <img id="tulip" src="./static/example.jpg" alt="The Tulip" />
-    <p>画布：</p>
-    <canvas
-        id="myCanvas"
-        width="500"
-        height="300"
-        style="border:1px solid #d3d3d3;background:#ffffff;"
-    >
-        Your browser does not support the HTML5 canvas tag.
-    </canvas>
+    <div class="container">
+        <div class="preview">
+            <p>要使用的图像：</p>
+            <img id="tulip" src="./static/example.jpg" alt="The Tulip" />
+            <p>画布：</p>
+            <canvas
+                id="myCanvas"
+                width="500"
+                height="300"
+                style="border:1px solid #d3d3d3;background:#ffffff;"
+            >
+                Your browser does not support the HTML5 canvas tag.
+            </canvas>
+        </div>
+        <div class="operation">
+            <div>
+                <input id="x" value="200" placeholder="x 轴坐标" type="text">
+                <input id="y" value="100" placeholder="y 轴坐标" type="text">
+            </div>
+            <div>
+                <input id="angle" value="45" placeholder="旋转的角度" type="text">
+            </div>
+            <button id="btn">执行</button>
+        </div>
+    </div>
     <script>
         document.body.onload = () => {
-            const c = document.getElementById('myCanvas');
-            const ctx = enhance(c.getContext('2d'));
+            const canvas = document.getElementById('myCanvas');
+            const ctx = enhance(canvas.getContext('2d'));
 
             const img = document.getElementById('tulip');
 
             ctx.drawImage(img, {
-                x: 100,
-                y: 60,
+                x: 200,
+                y: 100,
                 rotate: 45,
             });
+
+            const $btn = document.querySelector('#btn');
+            const $x = document.querySelector('#x');
+            const $y = document.querySelector('#y');
+            const $angle = document.querySelector('#angle');
+
+            btn.onclick = () => {
+                const x = Number($x.value);
+                const y = Number($y.value);
+                const rotate = Number($angle.value);
+                canvas.width = 500;
+                canvas.height = 300;
+                ctx.drawImage(img, {
+                    x,
+                    y,
+                    rotate,
+                });
+            }
         }
     </script>
 </body>

@@ -23,7 +23,6 @@ export function computeXAndY(x, y, rotate) {
     if (x === 0 && y === 0) {
         return [x, y];
     }
-
     if (rotate === 90) {
         console.log('case 5');
         // 4、旋转角度等于 90
@@ -34,7 +33,7 @@ export function computeXAndY(x, y, rotate) {
         // 11、旋转角度等于 270
         return fixArr([-y, x]);
     }
-    if (rotate === 360) {
+    if (rotate === 360 || rotate === 0) {
         return [x, y];
     }
 

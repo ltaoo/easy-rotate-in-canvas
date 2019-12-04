@@ -1,5 +1,7 @@
 const path = require('path');
 
+const TerserPlugin = require('terser-webpack-plugin');
+
 const env = process.env.NODE_ENV;
 
 function resolve(relativePath) {
@@ -18,15 +20,34 @@ module.exports = {
         libraryExport: 'default',
     },
     module: {
-        rules: [{
-            test: /\.js$/,
-            loader: 'babel-loader',
-            options: {
-                presets: [
-                    ['@babel/preset-env'],
-                ],
+        rules: [
+            {
+                test: /\.js$/,
+                loader: 'babel-loader',
+                options: {
+                    presets: [
+                        ['@babel/preset-env'],
+                    ],
+                },
             },
-        }, ],
+        ],
+    },
+    optimization: {
+        minimizer: [
+            new TerserPlugin({
+                extractComments: true,
+                cache: true,
+                parallel: true,
+                sourceMap: true, // Must be set to true if using source-maps in production
+                terserOptions: {
+                    // https://github.com/webpack-contrib/terser-webpack-plugin#terseroptions
+                    extractComments: 'all',
+                    compress: {
+                        drop_console: true,
+                    },
+                },
+            }),
+        ],
     },
     mode: env,
 };

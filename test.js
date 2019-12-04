@@ -81,4 +81,10 @@ describe('compute x and y by rotate', () => {
 
         expect(result).toEqual([10, 60]);
     });
+
+    test('15、旋转角度等于 0', () => {
+        const result = computeXAndY(10, 60, 0);
+
+        expect(result).toEqual([10, 60]);
+    });
 });
