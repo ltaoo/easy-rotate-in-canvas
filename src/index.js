@@ -24,12 +24,12 @@ export function computeXAndY(x, y, rotate) {
         return [x, y];
     }
     if (rotate === 90) {
-        console.log('case 5');
+        // console.log('case 5');
         // 4、旋转角度等于 90
         return fixArr([y, -x]);
     }
     if (rotate === 270) {
-        console.log('case 11');
+        // console.log('case 11');
         // 11、旋转角度等于 270
         return fixArr([-y, x]);
     }
@@ -44,7 +44,7 @@ export function computeXAndY(x, y, rotate) {
     // 将弧度转换成角度
     const angle = Math.floor(180 / (Math.PI / radina));
 
-    console.log(angle, rotate);
+    // console.log(angle, rotate);
     let result = [0, 0];
     if (angle === rotate) {
         // 2、旋转角度等于图片角度
@@ -53,14 +53,14 @@ export function computeXAndY(x, y, rotate) {
 
     if (rotate > 0 && rotate < 90) {
         if (angle > rotate) {
-            console.log('case 3');
+            // console.log('case 3');
             // 3、旋转角度小于 90 且图片角度大于旋转角度
             const totalAngle = angle - rotate;
             const realX = Math.cos(totalAngle * (Math.PI / 180)) * hypotenuse;
             const realY = Math.sin(totalAngle * (Math.PI / 180)) * hypotenuse;
             return fixArr([realX, realY]);
         }
-        console.log('case 4');
+        // console.log('case 4');
         // 4、旋转角度小于 90 且图片角度小于旋转角度
         const totalAngle = rotate - angle;
         const realX = Math.cos(totalAngle * (Math.PI / 180)) * hypotenuse;
@@ -117,60 +117,63 @@ export function computeXAndY(x, y, rotate) {
     return result.map(toFix);
 }
 
-class EnhancedCtx {
-    constructor(ctx) {
-        this.originalCtx = ctx;
+function drawImage(ctx, img, options) {
+    const {
+        x,
+        y,
+        width,
+        height,
+        crop,
+        scale,
+        rotate,
+    } = options;
+    if (isValidatedParam(scale)) {
+        ctx.scale(scale, scale);
+    }
+    let lastX = x;
+    let lastY = y;
+    if (isValidatedParam(rotate)) {
+        ctx.rotate(rotate * (Math.PI / 180));
+        [lastX, lastY] = computeXAndY(x, y, rotate);
     }
 
-    drawImage(img, options) {
-        const ctx = this.originalCtx;
+    const applyParams = [img];
+
+    if (crop !== undefined && typeof crop === 'object') {
         const {
-            x,
-            y,
-            width,
-            height,
-            crop,
-            scale,
-            rotate,
-        } = options;
-        if (isValidatedParam(scale)) {
-            ctx.scale(scale, scale);
+            x: cropX, y: cropY, width: cropWidth, height: cropHeight,
+        } = crop;
+        if (
+            isValidatedParam(cropX) && isValidatedParam(cropY)
+            && isValidatedParam(cropWidth) && isValidatedParam(cropHeight)
+        ) {
+            applyParams.push(cropX, cropY, cropWidth, cropHeight);
         }
-        let lastX = x;
-        let lastY = y;
-        if (isValidatedParam(rotate)) {
-            ctx.rotate(rotate * (Math.PI / 180));
-            [lastX, lastY] = computeXAndY(x, y, rotate);
-        }
+    }
 
-        const applyParams = [img];
+    applyParams.push(lastX, lastY);
 
-        if (crop !== undefined && typeof crop === 'object') {
-            const {
-                x: cropX, y: cropY, width: cropWidth, height: cropHeight,
-            } = crop;
-            if (
-                isValidatedParam(cropX) && isValidatedParam(cropY)
-                && isValidatedParam(cropWidth) && isValidatedParam(cropHeight)
-            ) {
-                applyParams.push(cropX, cropY, cropWidth, cropHeight);
-            }
-        }
+    if (isValidatedParam(width) && isValidatedParam(height)) {
+        applyParams.push(width, height);
+    }
 
-        applyParams.push(lastX, lastY);
+    ctx.drawImage(...applyParams);
 
-        if (isValidatedParam(width) && isValidatedParam(height)) {
-            applyParams.push(width, height);
-        }
-
-        ctx.drawImage(...applyParams);
-
-        if (isValidatedParam(rotate)) {
-            ctx.rotate(-rotate * (Math.PI / 180));
-        }
+    if (isValidatedParam(rotate)) {
+        ctx.rotate(-rotate * (Math.PI / 180));
     }
 }
 
 export default function enhance(ctx) {
-    return new EnhancedCtx(ctx);
+    return new Proxy(ctx, {
+        get(target, key) {
+            if (key === 'drawImage') {
+                return drawImage.bind(null, target);
+            }
+            return target[key].bind(target);
+        },
+        set(target, key, value) {
+            target[key] = value;
+        },
+    });
 }

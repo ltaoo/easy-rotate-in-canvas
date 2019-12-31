@@ -10,7 +10,7 @@
             display: flex;
         }
     </style>
-    <script src="https://unpkg.com/easy-rotate-in-canvas@1.0.2"></script>
+    <script src="https://unpkg.com/easy-rotate-in-canvas@1.0.3"></script>
 </head>
 <body>
     <div class="container">
@@ -50,6 +50,8 @@
                 y: 100,
                 rotate: 45,
             });
+            ctx.fillStyle = '#ccc';
+            ctx.fillRect(0, 0, 100, 100);
 
             const $btn = document.querySelector('#btn');
             const $x = document.querySelector('#x');
